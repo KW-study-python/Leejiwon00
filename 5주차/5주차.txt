@@ -1,0 +1,51 @@
+<Frequent Itemsets>
+
+Support for itemset I : 전체 itemset에서 I를 포함하는 basket의 개수
+
+------------------------------------
+
+TID	Items
+1	Bread, Coke, Milk
+2	Beer, Bread
+3	Beer, Coke, Diaper, Milk
+4	Beer, Bread, Diaper, Milk
+5	Coke, Diaper, Milk
+------------------------------------
+
+ 위 데이터에서 {Beer, Bread}의 support는 2이다.
+
+support threshold s가 주어졌을 때, 최소 s개의 basket을 frequent itemset이라 부른다.
+
+Confidence : I가 주어졌을 때, j도 있을 확률 
+
+conf(I → j) = support(I ∪ j) / support(I)
+
+<Mining Association Rules>
+
+i) 모든 빈발 항목 집합 I를 찾는다.
+
+ii) 규칙을 생성한다. 
+
+ I의 부분 집합을 이용해서 생성할 수 있는 모든 연관 규칙을 만든다.
+
+ 이때 A, B, C -> D가 threshold 이하라면 {A, B, C}의 부분집합들로 구성된 연관규칙들에 대한 검사는 진행할 필요가 없어진다.
+
+<A-Prioi Algorithm>
+
+pass 1에서 개별 아이템이 몇 번 등장했는지 세고 threshold보다 큰 경우에만 pass 2에서도 이용한다. 이런 방식으로 pair를 확장한다.
+
+<PCY Algorithm>
+
+pass 1에서 빈발한 아이템 페어를 만들고 해싱하여 버킷에 저장한다. 버킷의 값이 threshold보다 작다면 그에 해당하는 페어는 고려할 필요가 없다. 
+
+<Random Sampling>
+
+메모리에 들어올 만큼만 샘플링하는 방법이다. FN(빈번한 아이템이지만 샘플링에서는 빈번하지 않다고 나온 경우)를 거를 수 없다는 문제가 있다.
+
+<Son Algorithm>
+
+방법은 Random Sampling과 동일하다. 하지만 이 알고리즘은 모든 데이터를 다 읽어서 확인한다는 것이 차이점이다. 이 방법으로는 FN도 확실하게 거를 수 있다. 데이터가 클수록 느려진다는 단점이 있다.
+
+<Toivonen's Algorithm>
+
+시작은 Random Sampling과 같으나 1% 로 샘플링을 할때 threshold는 1/125로 설정한다는 차이가 있다. 이 알고리즘에서 중요한 것은 negative border이다. {a,b}, {a,c}, {b,c}가 많이 등장했으면 {a,b,c}도 많이 등장할 가능성이 있으므로 또 검사를 해보기 위해 {a,b,c}를 negative border에 올리는 것이다. pass 2에서 negative border에 있는 집합이 실제로 빈번하게 등장하지 않았다면 끝이나게 되고, 실제로 빈번하게 등장했다면 pass 1부터 다시 진행하면 된다.
